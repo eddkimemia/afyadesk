@@ -26,6 +26,17 @@ export async function POST(req: NextRequest) {
     const safeExt = extAllowed.includes(ext) ? ext : file.type === "application/pdf" ? "pdf" : "jpg";
     const name = `cert-${Date.now()}-${crypto.randomBytes(6).toString("hex")}.${safeExt}`;
 
+    // On Vercel, use Blob for persistence if configured
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      try {
+        const { put } = await import("@vercel/blob");
+        const blob = await put(`uploads/${name}`, file, { access: "public" });
+        return NextResponse.json({ url: blob.url });
+      } catch (blobErr: any) {
+        console.error("Blob certificate upload failed, falling back to filesystem:", blobErr.message);
+      }
+    }
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -41,7 +52,7 @@ export async function POST(req: NextRequest) {
         await mkdir(tmpDir, { recursive: true });
         filePath = path.join(tmpDir, name);
         await writeFile(filePath, buffer);
-        console.warn("Certificate upload saved to /tmp (ephemeral on Vercel) — for persistence configure Vercel Blob:", filePath);
+        console.warn("Certificate upload saved to /tmp (ephemeral on Vercel) — for persistence configure BLOB_READ_WRITE_TOKEN:", filePath);
       } else {
         throw err;
       }

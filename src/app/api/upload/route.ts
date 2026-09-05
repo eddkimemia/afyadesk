@@ -41,11 +41,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Only JPG/PNG/WEBP/PDF/PPTX/MP4" }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
     const ext = file.name.split(".").pop() || "jpg";
     const name = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}.${ext}`;
+
+    // On Vercel, use Vercel Blob for persistence if configured — otherwise filesystem is ephemeral
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      try {
+        const { put } = await import("@vercel/blob");
+        const blob = await put(`uploads/${name}`, file, { access: "public" });
+        return NextResponse.json({ url: blob.url });
+      } catch (blobErr: any) {
+        console.error("Blob upload failed, falling back to filesystem:", blobErr.message);
+        // fall through to filesystem fallback
+      }
+    }
+
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
 
     // Vercel has read-only filesystem except /tmp — try public/uploads first, fallback to /tmp/uploads
     let uploadDir = path.join(process.cwd(), "public", "uploads");
@@ -60,9 +72,9 @@ export async function POST(req: NextRequest) {
         await mkdir(tmpDir, { recursive: true });
         filePath = path.join(tmpDir, name);
         await writeFile(filePath, buffer);
-        // On Vercel /tmp is ephemeral and not served via /uploads — warn but return path
-        // For persistent storage on Vercel, configure Vercel Blob (BLOB_READ_WRITE_TOKEN) and use @vercel/blob
-        console.warn("Upload saved to /tmp (ephemeral on Vercel) — configure Vercel Blob for persistence:", filePath);
+        // On Vercel /tmp is ephemeral and not served via /uploads — warn
+        console.warn("Upload saved to /tmp (ephemeral on Vercel) — configure BLOB_READ_WRITE_TOKEN for persistence:", filePath);
+        // Still return /uploads URL but it will 404 after redeploy — better to use Blob
       } else {
         throw err;
       }
