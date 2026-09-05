@@ -110,7 +110,9 @@ export function Footer() {
               <a href="mailto:hello@afyadesk.co.ke" className="text-sm font-semibold hover:text-white">
                 hello@afyadesk.co.ke
               </a>
-              <p className="text-sm font-semibold">+254 700 000 000</p>
+              <a href="tel:+254753728292" className="text-sm font-semibold hover:text-white">
+                +254 753 728 292
+              </a>
             </div>
           </div>
         </div>

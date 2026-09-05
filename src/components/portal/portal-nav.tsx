@@ -75,7 +75,7 @@ export function PortalFooter() {
         </div>
         <div className="flex items-center gap-4 text-xs">
           <a href="mailto:hello@afyadesk.co.ke" className="text-[#0F8B8D] font-semibold hover:underline">hello@afyadesk.co.ke</a>
-          <span className="text-[#8A9BB0]">+254 700 000 000</span>
+          <span className="text-[#8A9BB0]">+254 753 728 292</span>
           <Link href="/course" className="text-[#5B6B80] hover:text-[#0B1F33]">Course</Link>
           <Link href="/careers/apply" className="text-[#5B6B80] hover:text-[#0B1F33]">Apply</Link>
         </div>

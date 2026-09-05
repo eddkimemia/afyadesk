@@ -77,7 +77,7 @@ export default async function CareersApplyPage({ searchParams }: { searchParams:
 
           <div className="rounded-2xl bg-[#F8FAFC] border border-[#E6EEF6] p-5">
             <h4 className="font-semibold text-[#0B1F33]">Need help?</h4>
-            <p className="text-sm text-[#5B6B80]">hello@afyadesk.co.ke • +254 700 000 000</p>
+            <p className="text-sm text-[#5B6B80]">hello@afyadesk.co.ke • +254 753 728 292</p>
             <Link href="/careers" className="mt-2 inline-flex text-sm font-semibold text-[#0F8B8D]">Browse roles →</Link>
           </div>
         </div>

@@ -110,7 +110,7 @@ export function CourseEnrollForm({ courseSlug = "remote-medical-careers", priceL
             Cancel / Try again
           </Button>
         </div>
-        <p className="text-xs text-[#8A9BB0] mt-3">Didn’t get prompt? Ensure phone is 2547... (e.g. +254 700 000000). STK expires in 2 mins.</p>
+        <p className="text-xs text-[#8A9BB0] mt-3">Didn’t get prompt? Ensure phone is 2547... (e.g. +254 753 728292). STK expires in 2 mins.</p>
       </div>
     );
   }

@@ -679,7 +679,7 @@ export default function AdminDashboardClient({ user }: { user: any }) {
               <div className="mt-4 grid gap-3 text-sm">
                 <div className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E6EEF6]">
                   <div className="font-semibold">Contact</div>
-                  <div className="text-xs text-[#5B6B80]">hello@afyadesk.co.ke • +254 700 000 000 • Nairobi</div>
+                  <div className="text-xs text-[#5B6B80]">hello@afyadesk.co.ke • +254 753 728 292 • Nairobi</div>
                 </div>
                 <div className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E6EEF6]">
                   <div className="font-semibold">Logo</div>

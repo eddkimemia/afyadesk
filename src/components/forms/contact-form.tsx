@@ -64,7 +64,7 @@ export function ContactForm() {
         </div>
         <div>
           <Label>Phone</Label>
-          <Input name="phone" placeholder="+254 700 000 000" />
+          <Input name="phone" placeholder="+254 753 728 292" />
         </div>
       </div>
 

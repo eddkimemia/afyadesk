@@ -45,7 +45,7 @@ export default function AdminSettingsPage(){
       </div>
 
       <div className="rounded-2xl bg-white border border-[#E6EEF6] p-6 grid gap-3 text-sm">
-        <div className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E6EEF6]"><div className="font-semibold">Contact</div><div className="text-xs text-[#5B6B80]">hello@afyadesk.co.ke • +254 700 000 000 • Nairobi</div></div>
+        <div className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E6EEF6]"><div className="font-semibold">Contact</div><div className="text-xs text-[#5B6B80]">hello@afyadesk.co.ke • +254 753 728 292 • Nairobi</div></div>
         <div className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E6EEF6]"><div className="font-semibold">Logo</div><div className="text-xs flex items-center gap-2"><Image src="/logo.png" alt="logo" width={100} height={30} className="h-6 w-auto object-contain border rounded" /> /logo.png • /fav.jpg as favicon</div></div>
         <div className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E6EEF6]"><div className="font-semibold">Portal</div><div className="text-xs text-[#5B6B80]">/portal • gated, requires PAID/VERIFIED/COMPLETED enrollment. /portal/login for students. Certificate PDF via /api/portal/certificate with name/date/director.</div></div>
       </div>

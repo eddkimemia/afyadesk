@@ -23,8 +23,8 @@ export function Header() {
       <div className="hidden md:flex bg-[#0B1F33] text-white text-xs">
         <div className="mx-auto max-w-7xl w-full px-6 flex items-center justify-between h-8">
           <span className="opacity-90">🇰🇪 Built for Healthcare in Kenya • Serving Organizations Globally</span>
-          <a href="tel:+254700000000" className="flex items-center gap-1.5 hover:text-white/80">
-            <Phone className="h-3 w-3" /> +254 700 000 000
+          <a href="tel:+254753728292" className="flex items-center gap-1.5 hover:text-white/80">
+            <Phone className="h-3 w-3" /> +254 753 728 292
           </a>
         </div>
       </div>

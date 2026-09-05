@@ -38,7 +38,7 @@ export default function ContactPage() {
                 <Phone className="h-5 w-5 text-[#0F8B8D] shrink-0" />
                 <div>
                   <div className="font-medium text-[#0B1F33]">Phone / WhatsApp</div>
-                  <div className="text-[#5B6B80]">+254 700 000 000</div>
+                  <div className="text-[#5B6B80]">+254 753 728 292</div>
                 </div>
               </div>
               <div className="flex gap-3">

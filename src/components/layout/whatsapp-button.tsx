@@ -3,7 +3,7 @@
 export function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/254700000000?text=Hello%20AfyaDesk%2C%20I%27d%20like%20to%20learn%20more%20about%20your%20medical%20virtual%20assistants"
+      href="https://wa.me/254753728292?text=Hello%20AfyaDesk%2C%20I%27d%20like%20to%20learn%20more%20about%20your%20medical%20virtual%20assistants"
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:scale-105 transition-transform"
@@ -20,17 +20,17 @@ export function StickyMobileCTA() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E6EEF6] p-3 flex gap-3 md:hidden shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
       <a
-        href="https://wa.me/254700000000"
+        href="https://wa.me/254753728292"
         target="_blank"
         className="flex-1 h-11 rounded-full bg-white border border-[#E6EEF6] text-[#0B1F33] font-semibold text-sm flex items-center justify-center"
       >
         WhatsApp
       </a>
       <a
-        href="/contact"
+        href="tel:+254753728292"
         className="flex-1 h-11 rounded-full bg-[#0F8B8D] text-white font-semibold text-sm flex items-center justify-center"
       >
-        Book Consultation
+        Call +254 753 728 292
       </a>
     </div>
   );

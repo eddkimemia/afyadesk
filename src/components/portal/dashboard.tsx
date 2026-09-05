@@ -184,7 +184,7 @@ export function PortalDashboard({ enrollment, course, materials, progress }: any
 
           <div className="rounded-2xl bg-white border border-[#E6EEF6] p-6">
             <h4 className="font-semibold text-[#0B1F33]">Support</h4>
-            <p className="text-sm text-[#5B6B80]">hello@afyadesk.co.ke • +254 700 000 000</p>
+            <p className="text-sm text-[#5B6B80]">hello@afyadesk.co.ke • +254 753 728 292</p>
             <Link href="/course" className="mt-3 inline-flex text-sm font-semibold text-[#0F8B8D]">Back to course →</Link>
           </div>
         </div>
