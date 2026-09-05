@@ -1,0 +1,313 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum Role {
+  ADMIN
+  STAFF
+  CLIENT
+  APPLICANT
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL_SENT
+  WON
+  LOST
+}
+
+enum LeadSource {
+  WEBSITE
+  WHATSAPP
+  REFERRAL
+  DIRECT
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  SHORTLISTED
+  REJECTED
+  HIRED
+}
+
+enum EnrollmentStatus {
+  PENDING
+  PAID
+  VERIFIED
+  COMPLETED
+  REJECTED
+}
+
+// User for admin/dashboard auth
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relations
+  activityLogs ActivityLog[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Lead {
+  id                      String     @id @default(cuid())
+  fullName                String
+  organization            String?
+  email                   String
+  phone                   String?
+  country                 String?
+  orgType                 String?
+  servicesRequired        String?
+  numberOfStaff           String?
+  message                 String?    @db.Text
+  status                  LeadStatus @default(NEW)
+  source                  LeadSource @default(WEBSITE)
+  notes                   String?    @db.Text
+  assignedTo              String?
+  createdAt               DateTime   @default(now())
+  updatedAt               DateTime   @updatedAt
+  deletedAt               DateTime?
+
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+  @@index([source])
+}
+
+model Client {
+  id           String   @id @default(cuid())
+  name         String
+  organization String
+  email        String   @unique
+  phone        String?
+  country      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String   @db.Text
+  icon        String?
+  coverImage  String?
+  features    String[] @default([])
+  content     String?  @db.Text
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model JobApplication {
+  id               String            @id @default(cuid())
+  fullName         String
+  email            String
+  phone            String
+  location         String?
+  position         String
+  experience       String?
+  message          String?           @db.Text
+  resumeUrl        String?
+  hasCompletedCourse Boolean         @default(false)
+  courseCertificateUrl String?
+  status           ApplicationStatus @default(PENDING)
+  notes            String?           @db.Text
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([status])
+  @@index([position])
+  @@index([createdAt])
+  @@index([hasCompletedCourse])
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String   @db.Text
+  price       Int      // in KES
+  currency    String   @default("KES")
+  duration    String?
+  coverImage  String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  enrollments CourseEnrollment[]
+  materials   CourseMaterial[]
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model CourseEnrollment {
+  id                  String           @id @default(cuid())
+  fullName            String
+  email               String
+  phone               String
+  courseId            String
+  course              Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  mpesaCode           String?
+  checkoutRequestId   String?          @unique
+  merchantRequestId   String?
+  mpesaResultCode     Int?
+  mpesaResultDesc     String?
+  stkInitiatedAt      DateTime?
+  amount              Int?
+  status              EnrollmentStatus @default(PENDING)
+  hasCompletedCourse  Boolean          @default(false)
+  completedAt         DateTime?
+  certificateNo       String?          @unique
+  notes               String?          @db.Text
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  progress EnrollmentProgress[]
+
+  @@index([email])
+  @@index([status])
+  @@index([courseId])
+  @@index([createdAt])
+  @@index([checkoutRequestId])
+}
+
+model CourseMaterial {
+  id           String   @id @default(cuid())
+  courseId     String
+  course       Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  moduleNumber String   // "01".."20"
+  title        String
+  type         String   // PDF, PPTX, VIDEO, LINK
+  url          String   // /uploads/... or https://
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([courseId])
+  @@index([moduleNumber])
+  @@index([type])
+}
+
+model EnrollmentProgress {
+  id           String   @id @default(cuid())
+  enrollmentId String
+  enrollment   CourseEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  moduleNumber String
+  completed    Boolean  @default(false)
+  completedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([enrollmentId, moduleNumber])
+  @@index([enrollmentId])
+  @@index([moduleNumber])
+}
+
+model Testimonial {
+  id         String   @id @default(cuid())
+  name       String
+  role       String
+  organization String?
+  content    String   @db.Text
+  avatar     String?
+  rating     Int      @default(5)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model BlogPost {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  excerpt     String?   @db.Text
+  content     String    @db.Text
+  coverImage  String?
+  author      String?
+  tags        String[]  @default([])
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  views       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([slug])
+  @@index([published])
+  @@index([publishedAt])
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String   @db.Text
+  category  String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@index([isActive])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String?
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([entity])
+  @@index([createdAt])
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+}
