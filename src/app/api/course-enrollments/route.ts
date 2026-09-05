@@ -88,7 +88,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, id: enrollment.id });
     } catch (dbErr: any) {
       console.warn("DB unavailable for enrollment", dbErr?.message);
-      const isDemo = dbErr?.code === "P1001" || dbErr?.name === "PrismaClientInitializationError" || dbErr?.message?.includes("Environment variable") || dbErr?.message?.includes("Can't reach") || dbErr?.message?.includes("Authentication failed");
+      const isDemo =
+        dbErr?.code === "P1001" ||
+        dbErr?.code === "P2021" ||
+        dbErr?.name === "PrismaClientInitializationError" ||
+        dbErr?.name === "PrismaClientKnownRequestError" ||
+        dbErr?.message?.includes("Environment variable") ||
+        dbErr?.message?.includes("Can't reach") ||
+        dbErr?.message?.includes("Authentication failed") ||
+        dbErr?.message?.includes("does not exist in the current database") ||
+        dbErr?.message?.includes("The table") ||
+        dbErr?.message?.includes("public.Course");
       if (isDemo) {
         const demoEntry = {
           id: "demo-" + Date.now(),
@@ -131,8 +141,17 @@ export async function GET(req: NextRequest) {
     });
     return NextResponse.json(list);
   } catch (e: any) {
-    // Fallback to demo file if DB unavailable
-    const isDemo = e?.code === "P1001" || e?.name === "PrismaClientInitializationError" || e?.message?.includes("Environment variable") || e?.message?.includes("Can't reach") || e?.message?.includes("Authentication failed");
+    // Fallback to demo file if DB unavailable or table missing (Vercel DB not migrated)
+    const isDemo =
+      e?.code === "P1001" ||
+      e?.code === "P2021" ||
+      e?.name === "PrismaClientInitializationError" ||
+      e?.name === "PrismaClientKnownRequestError" ||
+      e?.message?.includes("Environment variable") ||
+      e?.message?.includes("Can't reach") ||
+      e?.message?.includes("Authentication failed") ||
+      e?.message?.includes("does not exist") ||
+      e?.message?.includes("The table");
     if (isDemo) {
       const demo = await readDemoEnrollments();
       return NextResponse.json(demo);

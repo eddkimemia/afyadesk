@@ -52,7 +52,17 @@ export async function POST(req: NextRequest) {
         },
       });
     } catch (dbErr: any) {
-      const isDemo = dbErr?.code === "P1001" || dbErr?.name === "PrismaClientInitializationError" || dbErr?.message?.includes("Environment variable") || dbErr?.message?.includes("Can't reach") || dbErr?.message?.includes("Authentication failed");
+      const isDemo =
+        dbErr?.code === "P1001" ||
+        dbErr?.code === "P2021" ||
+        dbErr?.name === "PrismaClientInitializationError" ||
+        dbErr?.name === "PrismaClientKnownRequestError" ||
+        dbErr?.message?.includes("Environment variable") ||
+        dbErr?.message?.includes("Can't reach") ||
+        dbErr?.message?.includes("Authentication failed") ||
+        dbErr?.message?.includes("does not exist") ||
+        dbErr?.message?.includes("The table") ||
+        dbErr?.message?.includes("public.Course");
       if (isDemo) {
         isDemoFile = true;
         const path = await import("path");
