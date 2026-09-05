@@ -52,15 +52,22 @@ export function Chatbot() {
       </button>
 
       {open && (
-        <div className="fixed bottom-[84px] md:bottom-24 right-6 z-50 w-[92vw] max-w-[360px] rounded-[20px] bg-white border border-[#E6EEF6] shadow-2xl overflow-hidden flex flex-col max-h-[60vh] md:max-h-[70vh]">
+        <div className="fixed bottom-[152px] md:bottom-24 right-6 z-50 w-[92vw] max-w-[360px] rounded-[20px] bg-white border border-[#E6EEF6] shadow-2xl overflow-hidden flex flex-col max-h-[60vh] md:max-h-[70vh]">
           <div className="bg-[#0B1F33] text-white px-4 py-3 flex items-center gap-3">
             <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center text-[#0B1F33]">
               <Bot className="h-5 w-5" />
             </div>
-            <div>
+            <div className="flex-1">
               <div className="text-sm font-bold leading-none">Afya — AfyaDesk Assistant</div>
               <div className="text-xs text-white/60">Typically replies instantly • No clinical advice</div>
             </div>
+            <button
+              onClick={() => setOpen(false)}
+              className="h-8 w-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center shrink-0"
+              aria-label="Close chat"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
 
           <div ref={listRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#F8FAFC]">
