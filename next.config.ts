@@ -2,8 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Stock links are all Unsplash/Pixabay — allow all subdomains + Vercel Blob
-    // If Vercel Image Optimization ever 403s on Unsplash, fallback is unoptimized (direct URL)
+    // Stock links are all Unsplash — Vercel Image Optimization returns 402 on Hobby tier
+    // Set unoptimized:true to serve stock images directly (no /_next/image transform) — fixes 402
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
