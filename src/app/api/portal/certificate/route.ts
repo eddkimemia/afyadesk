@@ -145,7 +145,7 @@ export async function GET(req: Request) {
       name: { x0: 380, y0: 465, x1: 1156, y1: 535 }, // between "This is to certify that" and gold divider at y 563
       date: { x0: 380, y0: 770, x1: 620, y1: 810 }, // left, further from midline, lower (was 480-720), on top of gold line
       director: { x0: 920, y0: 770, x1: 1160, y1: 810 }, // right, further from midline, lower
-      certNo: { x0: 590, y0: 930, x1: 946, y1: 955 }, // below verify link (verify at ~900), bottom center
+      certNo: { x0: 570, y0: 945, x1: 966, y1: 975 }, // slightly below previous (was 930-955), centered bottom, deeper color
     };
 
     // Helper: fit single line centered in box, auto scale, padding
@@ -211,8 +211,8 @@ export async function GET(req: Request) {
     // 3. Director — slightly lower, further from midline, larger, colorful teal/gold
     drawFittedSingleLine(director, fontDirector, boxes.director, 12, 14, rgb(0.71, 0.55, 0.15));
 
-    // 4. Certificate No — below verify link (verify at ~900, certNo at 930), small, not overlapping QR/emblem
-    drawFittedSingleLine(`Certificate No: ${certNo}`, fontSmall, boxes.certNo, 7, 8.5, rgb(0.42, 0.52, 0.62));
+    // 4. Certificate No — slightly below previous (945-975), deeper navy for visibility, larger
+    drawFittedSingleLine(`Certificate No: ${certNo}`, fontSmall, boxes.certNo, 8, 9.5, rgb(0.05, 0.15, 0.33));
 
     const pdfBytes = await pdfDoc.save();
     return new NextResponse(Buffer.from(pdfBytes), {

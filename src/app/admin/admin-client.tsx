@@ -186,9 +186,9 @@ export default function AdminDashboardClient({ user }: { user: any }) {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 py-6 grid lg:grid-cols-[220px_1fr] gap-6">
+      <div className="mx-auto max-w-7xl px-6 py-6 grid lg:grid-cols-[220px_minmax(0,1fr)] gap-6 min-w-0">
         {/* sidebar */}
-        <div className="bg-white border border-[#E6EEF6] rounded-2xl p-2 h-fit sticky top-6">
+        <div className="bg-white border border-[#E6EEF6] rounded-2xl p-2 h-fit sticky top-6 shrink-0">
           {[
             ["Dashboard", "dashboard"],
             ["Leads", "leads"],
@@ -214,7 +214,7 @@ export default function AdminDashboardClient({ user }: { user: any }) {
           </div>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-5 min-w-0 overflow-hidden">
           {tab === "dashboard" && stats && (
             <>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -542,22 +542,22 @@ export default function AdminDashboardClient({ user }: { user: any }) {
           )}
 
           {tab === "services" && (
-            <div className="space-y-5">
-              <div className="rounded-2xl bg-white border border-[#E6EEF6] p-6">
+            <div className="space-y-5 min-w-0 overflow-hidden">
+              <div className="rounded-2xl bg-white border border-[#E6EEF6] p-6 overflow-hidden">
                 <h3 className="font-bold text-[#0B1F33]">Services — {services.length}</h3>
                 <p className="text-sm text-[#5B6B80]">Fallback to static data; admin can add with cover image via upload.</p>
-                <div className="mt-4 grid gap-3">
+                <div className="mt-4 grid gap-3 min-w-0">
                   {services.map((s: any) => (
-                    <div key={s.slug || s.id} className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E6EEF6] flex gap-4">
+                    <div key={s.slug || s.id} className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E6EEF6] flex gap-4 min-w-0 overflow-hidden">
                       {s.coverImage && (
                         <span className="relative h-14 w-14 rounded-xl overflow-hidden shrink-0 border border-[#E6EEF6] bg-white">
                           <Image src={s.coverImage} alt={s.title} fill className="object-cover" unoptimized />
                         </span>
                       )}
-                      <div>
-                        <div className="font-semibold text-[#0B1F33]">{s.title || s.slug}</div>
-                        <div className="text-xs text-[#5B6B80]">{s.description?.slice(0, 120)}</div>
-                        <div className="text-xs text-[#8A9BB0] mt-1">{s.icon || ""} • {s.slug}</div>
+                      <div className="min-w-0 flex-1 overflow-hidden">
+                        <div className="font-semibold text-[#0B1F33] break-words">{s.title || s.slug}</div>
+                        <div className="text-xs text-[#5B6B80] break-words line-clamp-2">{s.description?.slice(0, 120)}</div>
+                        <div className="text-xs text-[#8A9BB0] mt-1 break-all">{s.icon || ""} • {s.slug}</div>
                       </div>
                     </div>
                   ))}
@@ -593,21 +593,21 @@ export default function AdminDashboardClient({ user }: { user: any }) {
           )}
 
           {tab === "blog" && (
-            <div className="space-y-5">
-              <div className="rounded-2xl bg-white border border-[#E6EEF6] p-6">
+            <div className="space-y-5 min-w-0 overflow-hidden">
+              <div className="rounded-2xl bg-white border border-[#E6EEF6] p-6 overflow-hidden">
                 <h3 className="font-bold text-[#0B1F33]">Blog — {blog.length}</h3>
-                <div className="mt-4 grid gap-3">
+                <div className="mt-4 grid gap-3 min-w-0">
                   {blog.slice(0, 20).map((p: any) => (
-                    <div key={p.slug || p.id} className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E6EEF6] flex gap-3">
+                    <div key={p.slug || p.id} className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E6EEF6] flex gap-3 min-w-0 overflow-hidden">
                       {(p.coverImage || p.image) && (
                         <span className="relative h-16 w-24 rounded-xl overflow-hidden shrink-0 border border-[#E6EEF6] bg-white">
                           <Image src={p.coverImage || p.image} alt={p.title} fill className="object-cover" unoptimized />
                         </span>
                       )}
-                      <div className="min-w-0">
-                        <div className="font-medium text-[#0B1F33] truncate">{p.title}</div>
-                        <div className="text-xs text-[#5B6B80]">{p.slug} • {p.published ? "Published" : "Draft"} • {p.coverImage ? "has cover" : "no cover"}</div>
-                        <div className="text-xs text-[#8A9BB0] truncate">{p.excerpt?.slice(0, 80)}</div>
+                      <div className="min-w-0 flex-1 overflow-hidden">
+                        <div className="font-medium text-[#0B1F33] truncate break-words">{p.title}</div>
+                        <div className="text-xs text-[#5B6B80] break-all truncate">{p.slug} • {p.published ? "Published" : "Draft"} • {p.coverImage ? "has cover" : "no cover"}</div>
+                        <div className="text-xs text-[#8A9BB0] truncate break-words">{p.excerpt?.slice(0, 80)}</div>
                       </div>
                     </div>
                   ))}
