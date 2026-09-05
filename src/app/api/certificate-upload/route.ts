@@ -26,16 +26,31 @@ export async function POST(req: NextRequest) {
     const safeExt = extAllowed.includes(ext) ? ext : file.type === "application/pdf" ? "pdf" : "jpg";
     const name = `cert-${Date.now()}-${crypto.randomBytes(6).toString("hex")}.${safeExt}`;
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const filePath = path.join(uploadDir, name);
-    await writeFile(filePath, buffer);
+
+    // Vercel has read-only filesystem except /tmp — try public/uploads first, fallback to /tmp/uploads
+    let uploadDir = path.join(process.cwd(), "public", "uploads");
+    let filePath = path.join(uploadDir, name);
+    try {
+      await mkdir(uploadDir, { recursive: true });
+      await writeFile(filePath, buffer);
+    } catch (err: any) {
+      if (err?.code === "EROFS" || process.env.VERCEL) {
+        const tmpDir = path.join("/tmp", "uploads");
+        await mkdir(tmpDir, { recursive: true });
+        filePath = path.join(tmpDir, name);
+        await writeFile(filePath, buffer);
+        console.warn("Certificate upload saved to /tmp (ephemeral on Vercel) — for persistence configure Vercel Blob:", filePath);
+      } else {
+        throw err;
+      }
+    }
 
     const url = `/uploads/${name}`;
     return NextResponse.json({ url });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Upload failed" }, { status: 500 });
+    const msg = e.message?.includes("EROFS") ? "Upload failed: read-only filesystem on Vercel. Configure Vercel Blob Storage (BLOB_READ_WRITE_TOKEN) or external storage." : e.message || "Upload failed";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

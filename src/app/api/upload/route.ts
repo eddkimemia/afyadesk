@@ -47,14 +47,31 @@ export async function POST(req: NextRequest) {
     const ext = file.name.split(".").pop() || "jpg";
     const name = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}.${ext}`;
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
-    const filePath = path.join(uploadDir, name);
-    await writeFile(filePath, buffer);
+    // Vercel has read-only filesystem except /tmp — try public/uploads first, fallback to /tmp/uploads
+    let uploadDir = path.join(process.cwd(), "public", "uploads");
+    let filePath = path.join(uploadDir, name);
+    try {
+      await mkdir(uploadDir, { recursive: true });
+      await writeFile(filePath, buffer);
+    } catch (err: any) {
+      // Fallback for Vercel (EROFS: read-only)
+      if (err?.code === "EROFS" || process.env.VERCEL) {
+        const tmpDir = path.join("/tmp", "uploads");
+        await mkdir(tmpDir, { recursive: true });
+        filePath = path.join(tmpDir, name);
+        await writeFile(filePath, buffer);
+        // On Vercel /tmp is ephemeral and not served via /uploads — warn but return path
+        // For persistent storage on Vercel, configure Vercel Blob (BLOB_READ_WRITE_TOKEN) and use @vercel/blob
+        console.warn("Upload saved to /tmp (ephemeral on Vercel) — configure Vercel Blob for persistence:", filePath);
+      } else {
+        throw err;
+      }
+    }
 
     const url = `/uploads/${name}`;
     return NextResponse.json({ url });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Upload failed" }, { status: 500 });
+    const msg = e.message?.includes("EROFS") ? "Upload failed: read-only filesystem on Vercel. Configure Vercel Blob Storage (BLOB_READ_WRITE_TOKEN) or use external storage (S3/R2)." : e.message || "Upload failed";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
