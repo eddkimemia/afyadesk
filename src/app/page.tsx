@@ -17,13 +17,13 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <HomeCareersSection />
+      <HomeCourseSection />
       <ProblemSection />
       <SolutionSection />
       <ServicesSection />
       <HowItWorks />
       <WhyAfyaDesk />
-      <HomeCourseSection />
-      <HomeCareersSection />
       <SecuritySection />
       <KenyaSection />
       <PricingSection />

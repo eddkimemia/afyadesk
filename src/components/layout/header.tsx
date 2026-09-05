@@ -54,9 +54,14 @@ export function Header() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
-          <Link href="/contact">
+          <Link href="/careers">
             <Button size="lg" className="rounded-full">
-              Book a Free Consultation <ArrowRight className="h-4 w-4" />
+              Find Jobs <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+          <Link href="/course" className="hidden xl:inline-flex">
+            <Button size="lg" variant="secondary" className="rounded-full">
+              View Course
             </Button>
           </Link>
         </div>
@@ -84,9 +89,14 @@ export function Header() {
               </Link>
             ))}
             <div className="pt-3 flex flex-col gap-2">
-              <Link href="/contact" onClick={() => setOpen(false)}>
+              <Link href="/careers" onClick={() => setOpen(false)}>
                 <Button size="lg" className="w-full">
-                  Book a Free Consultation
+                  Find Jobs <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/course" onClick={() => setOpen(false)}>
+                <Button size="lg" variant="secondary" className="w-full">
+                  View Course
                 </Button>
               </Link>
             </div>

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Bot, User, ArrowRight } from "lucide-react";
+import { MessageCircle, X, Send, Bot, User, ArrowRight, Briefcase, GraduationCap } from "lucide-react";
 import Link from "next/link";
 
 type Msg = { from: "bot" | "user"; text: string };
@@ -42,17 +42,17 @@ export function Chatbot() {
 
   return (
     <>
-      {/* floating trigger */}
+      {/* floating trigger — raised on mobile to sit above StickyMobileCTA (Jobs/Course) */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-[#0B1F33] text-white shadow-xl flex items-center justify-center hover:scale-105 transition border border-white/10"
+        className="fixed bottom-[84px] md:bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-[#0B1F33] text-white shadow-xl flex items-center justify-center hover:scale-105 transition border border-white/10"
         aria-label={open ? "Close chat" : "Open AfyaDesk chat"}
       >
         {open ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
       </button>
 
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[92vw] max-w-[360px] rounded-[20px] bg-white border border-[#E6EEF6] shadow-2xl overflow-hidden flex flex-col max-h-[70vh]">
+        <div className="fixed bottom-[84px] md:bottom-24 right-6 z-50 w-[92vw] max-w-[360px] rounded-[20px] bg-white border border-[#E6EEF6] shadow-2xl overflow-hidden flex flex-col max-h-[60vh] md:max-h-[70vh]">
           <div className="bg-[#0B1F33] text-white px-4 py-3 flex items-center gap-3">
             <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center text-[#0B1F33]">
               <Bot className="h-5 w-5" />
@@ -125,20 +125,13 @@ export function Chatbot() {
 
 export function StickyMobileCTA() {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E6EEF6] p-3 flex gap-3 md:hidden shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
-      <a
-        href="#chat"
-        onClick={(e) => {
-          e.preventDefault();
-          document.querySelector<HTMLButtonElement>('button[aria-label*="AfyaDesk chat"]')?.click();
-        }}
-        className="flex-1 h-11 rounded-full bg-white border border-[#E6EEF6] text-[#0B1F33] font-semibold text-sm flex items-center justify-center gap-1.5"
-      >
-        <MessageCircle className="h-4 w-4" /> Chat with Afya
-      </a>
-      <a href="/contact" className="flex-1 h-11 rounded-full bg-[#0F8B8D] text-white font-semibold text-sm flex items-center justify-center">
-        Book Consultation
-      </a>
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E6EEF6] p-3 flex gap-3 md:hidden shadow-[0_-8px_30px_rgba(0,0,0,0.08)] pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+      <Link href="/careers" className="flex-1 h-11 rounded-full bg-[#0B1F33] text-white font-semibold text-sm flex items-center justify-center gap-1.5">
+        <Briefcase className="h-4 w-4" /> Jobs
+      </Link>
+      <Link href="/course" className="flex-1 h-11 rounded-full bg-white border border-[#E6EEF6] text-[#0B1F33] font-semibold text-sm flex items-center justify-center gap-1.5">
+        <GraduationCap className="h-4 w-4" /> Course
+      </Link>
     </div>
   );
 }
